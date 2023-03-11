@@ -17,8 +17,8 @@ def main():
         write_log()
     else:
         setup(fmain)
-        print("Directories generated. Place .xlsx file(s) into 'data' folder and 'event.txt' and 'aliases.txt' into"
-              " 'events folder' before rerunning.")
+        print("Directories generated. Place .xlsx file(s) into 'data' folder and edit 'event.txt' and 'aliases.txt' in the"
+              " 'events' folder before rerunning.")
 
 
 if __name__ == "__main__":
