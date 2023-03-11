@@ -75,4 +75,15 @@ water spout
   waterspout
 }
 ```
-This allows events in the Excel sheet(s) labeled as *waterspout* to be considered as instances of the *water spout* event.
+This allows events in the Excel sheet(s) labeled as *waterspout* to be considered as instances of the *water spout* event. Events may be given multiple aliases by listing multiple names between the pair of brackets.
+
+Example:
+```
+water spout
+{
+  waterspout
+  water-spout
+  water_spout
+}
+```
+*waterspout*, *water-spout*, *water_spout* will all be counted as instances of *water spout* when encountered.
