@@ -196,6 +196,12 @@ def create_directories(curdir):
         os.mkdir(".\\output")
     if not os.path.exists(".\\events"):
         os.mkdir(".\\events")
+        os.chdir(".\\events")
+        f1 = open("events.txt", "w")
+        f2 = open("aliases.txt", "w")
+        f1.close()
+        f2.close()
+        os.chdir(curdir)
     if not os.path.exists(".\\data"):
         os.mkdir(".\\data")
 # ---------------------------------------------------------------- #
