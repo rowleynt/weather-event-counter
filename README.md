@@ -38,3 +38,32 @@ event3
 event4
 ...etc
 ```
+Where each line within the file contains the entire name of one event. The event names within this file are case insensitive but spaces and special characters (slashes, dashes, etc.) are considered
+
+The `aliases.txt` serves to map multiple different names to a single event in the `events.txt` file. This is necessary as some event names may have changed over time or may have been entered incorrectly and these aliases allow these events to still be counted. The file uses the following format:
+```
+event1
+{
+  alias1
+  alias2
+  alias3
+  ...etc
+}
+event2
+{
+  alias1
+  alias2
+  alias3
+  ...etc
+}
+```
+**The names of the events must match exactly (case insensitive) with the name of an event in `events.txt` to be correctly aliased. The aliases must be tabbed over once.**
+
+A realistic example:
+```
+water spout
+{
+  waterspout
+}
+```
+This allows events in the Excel sheet(s) labeled as *waterspout* to be considered as instances of the *water spout* event.
