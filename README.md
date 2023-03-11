@@ -28,3 +28,13 @@ Place the Excel sheet(s) into the `data` folder.
 
 ### Events and Aliases
 
+Inside of the `events` folder, there are 2 generated `.txt` files: `events.txt` and `aliases.txt`.
+
+The `events.txt` file will contain the names of each event that you would like the script to consider while running. It uses the following format:
+```
+event1
+event2
+event3
+event4
+...etc
+```
