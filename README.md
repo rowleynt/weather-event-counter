@@ -89,3 +89,22 @@ water spout
 *waterspout*, *water-spout*, *water_spout* will all be counted as instances of *water spout* when encountered.
 
 ## Running
+
+After completing the first time setup, run the script again with the command ```python event_counter.py```. An output file is created within the `output` folder in the form of an Excel spreadsheet. The output file contains the following fields:
+```
+Total Events By Year: Tally of the total number of each event in each year, starting from the earliest date and ending at the latest date within the input data
+
+Total Events By Month: Tally of the total number of each event that occured in each month (JAN-DEC)
+
+Total Events Overall: Tally of the total number of each event that occured over the period of time defined by the input data
+
+Average Events By Month: The average number of each event that occured in each month (JAN-DEC). This is the total number of events in each month divided by the number of months elapsed
+
+Percentage of Events By Year: The percentage of each event out of the total that occured in each year
+
+Percentage of Events By Month: The percentage of each event out of the total that occured in each month
+
+Percentage of Events Overall: The percentage of each event out of the total of all events
+```
+
+The script will also generate a log file within the `logs` folder. This log file will contain an error detailing each event found within the input data that was not represented within the `events.txt` file. These specific occurrences can be added to the `aliases.txt` file to be counted if the script is run again.
