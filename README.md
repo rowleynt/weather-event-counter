@@ -1,5 +1,5 @@
-# weather event counter (change me)
-weather event counter (change me)
+# weather event counter
+weather event counter
 
 ## Initial Setup
 Before running, `openpyxl` must be installed using `pip`. To do so, navigate to the folder containing the python files within the command line and enter the following command:
