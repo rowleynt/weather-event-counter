@@ -1,4 +1,4 @@
-from wecutils import total_all, total_byyear, total_bymonth, avg_bymonth, percent_total, percent_bytime
+from wecutils import total_all, total_byyear, total_bymonth, avg_bymonth, percent_total, percent_bytime, map_to_name
 from pathlib import Path
 from openpyxl import Workbook
 from openpyxl.styles import Alignment
@@ -7,11 +7,12 @@ import datetime
 
 
 class OutputHandler(object):
-    def __init__(self, calendar):
-        self.total_all = total_all(calendar)  # done
-        self.total_byyear = total_byyear(calendar)  # done
-        self.total_bymonth = total_bymonth(calendar)  # done
-        self.avg_bymonth = avg_bymonth(calendar)  # done maybe
+    def __init__(self, data):
+        # TODO: sort data in dictionaries
+        self.total_all = total_all(data[0])  # done
+        self.total_byyear = total_byyear(data[1])  # done
+        self.total_bymonth = total_bymonth(data[2])  # done
+        self.avg_bymonth = avg_bymonth(data[1], self.total_bymonth)  # done
         self.percent_total = percent_total(self.total_all)  # done
         self.percent_byyear = percent_bytime(self.total_byyear)  # done
         self.percent_bymonth = percent_bytime(self.total_bymonth)  # done
@@ -49,7 +50,7 @@ class OutputHandler(object):
         i = 2  # reset i
         # ---- writing events from total_bymonth ----- #
         for month in self.total_bymonth:
-            sheet.cell(row=i, column=j).value = month
+            sheet.cell(row=i, column=j).value = map_to_name(month)
             sheet.merge_cells(f'{chr(k)}{i}:{chr(k + 1)}{i}')
             sheet.cell(row=i, column=j).alignment = Alignment(horizontal='center')
             i += 1
@@ -74,7 +75,7 @@ class OutputHandler(object):
         i = 2
         # ----- writing events from avg_bymonth ------ #
         for month in self.avg_bymonth:
-            sheet.cell(row=i, column=j).value = month
+            sheet.cell(row=i, column=j).value = map_to_name(month)
             sheet.merge_cells(f'{chr(k)}{i}:{chr(k + 1)}{i}')
             sheet.cell(row=i, column=j).alignment = Alignment(horizontal='center')
             i += 1
@@ -102,7 +103,7 @@ class OutputHandler(object):
         i = 2
         # --- writing events from percent_bymonth ---- #
         for month in self.percent_bymonth:
-            sheet.cell(row=i, column=j).value = month
+            sheet.cell(row=i, column=j).value = map_to_name(month)
             sheet.merge_cells(f'{chr(k)}{i}:{chr(k + 1)}{i}')
             sheet.cell(row=i, column=j).alignment = Alignment(horizontal='center')
             i += 1
