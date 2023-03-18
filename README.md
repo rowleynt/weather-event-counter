@@ -28,63 +28,30 @@ Place the Excel sheet(s) into the `data` folder.
 
 ### Events and Aliases
 
-Inside of the `events` folder, there are 2 generated `.txt` files: `events.txt` and `aliases.txt`.
+The event names that are counted are dynamically created while reading the data. This means that only events which are present in the data will be represented in the data and also serves to reduce the setup time for the user. However, this also means that any events that have been entered incorrectly and/or have had their names changed over the period of time which is represented in the data will be counted as separate events, which will reduce the accuracy of the output. This problem can be alleviated using *aliases*.
 
-The `events.txt` file will contain the names of each event that you would like the script to consider while running. It uses the following format:
-```
-event1
-event2
-event3
-event4
-...etc
-```
-Where each line within the file contains the entire name of one event. The event names within this file are case insensitive but spaces and special characters (slashes, dashes, etc.) are considered
+A file named `aliases.txt` can be found in the main directory after the initial setup. This file can be used to map multiple different event names found in the input data to a single event name to be counted instead.
 
-Example:
+The file will initially be empty, and must be updated with desired aliases. The format of an alias is as:
 ```
-flash flood
-hail
-tornado
-water spout
+<name1 from input>=<event name to be counted>
+<name2 from input>=<event name to be counted>
+<name3 from input>=<event name to be counted>
+etc.
 ```
-This `events.txt` file contains 4 events with the names: *flash flood*, *hail*, *tornado*, *water spout*
+*The aliases file is case insensitive, but the format `<alias>=<name>` must be matched to work properly.*
 
-The `aliases.txt` serves to map multiple different names to a single event in the `events.txt` file. This is necessary as some event names may have changed over time or may have been entered incorrectly and these aliases allow these events to still be counted. The file uses the following format:
+Example `aliases.txt` file:
 ```
-event1
-{
-  alias1
-  alias2
-  alias3
-  ...etc
-}
-event2
-{
-  alias1
-  alias2
-  alias3
-  ...etc
-}
+waterspout=water spout
 ```
-**The names of the events must match exactly (case insensitive) with the name of an event in `events.txt` to be correctly aliased. The aliases must be tabbed over once.**
+This allows events in the Excel sheet(s) labeled as *waterspout* to be considered as instances of the *water spout* event. Events may be given multiple aliases by listing multiple names equalling the desired event name.
 
 Example:
 ```
-water spout
-{
-  waterspout
-}
-```
-This allows events in the Excel sheet(s) labeled as *waterspout* to be considered as instances of the *water spout* event. Events may be given multiple aliases by listing multiple names between the pair of brackets.
-
-Example:
-```
-water spout
-{
-  waterspout
-  water-spout
-  water_spout
-}
+waterspout=water spout
+water-spout=water spout
+water_spout=water spout
 ```
 *waterspout*, *water-spout*, *water_spout* will all be counted as instances of *water spout* when encountered.
 
