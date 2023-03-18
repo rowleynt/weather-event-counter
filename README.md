@@ -14,9 +14,9 @@ The script must be run one time to set itself up before it can be used. To do so
 
 This first run will generate the following folders: `data`, `events`, `logs`, and `output`
 
-### Generated Folders
+### Generated Files
 
-The `data` folder will contain the Excel sheet(s) to be processed, the `events` folder will contain the list of weather events to be considered and a list of aliases to those events for event names that may have changed or been entered incorrectly in `events.txt` and `aliases.txt` respectively.
+The `data` folder will contain the user-provided Excel sheet(s) to be processed. The `aliases.txt` file is used for event name aliases (see **Events and Aliases** section below)
 
 The `logs` and `output` folder are used by the program for outputting the logs and formatted output data for each run respectively.
 
