@@ -12,7 +12,7 @@ The script must be run one time to set itself up before it can be used. To do so
 
 ```python event_counter.py``` or ```python3 event_counter.py``` if multiple versions of Python are installed.
 
-This first run will generate the following folders: `data`, `events`, `logs`, and `output`
+This first run will generate the following folders: `data`, `logs`, and `output`, along with `aliases.txt`
 
 ### Generated Files
 
