@@ -1,60 +1,72 @@
 import os
 import datetime
+import copy
 from pathlib import Path
 from openpyxl import load_workbook
 
+from Event import Event
+from Year import Year
+from Month import Month
+
 
 # ---------------------------- Math ------------------------------ #
-def total_all(cal):
+def total_all(data):
     """Returns a dictionary containing each event with a corresponding running total computed from the
     given Excel sheets."""
-    total_all_dict = build_event_dict()
-    for year in cal:
-        for month in year:
-            for event in month.event_dict:
-                total_all_dict[event] += month.event_dict[event]
-    return total_all_dict
+    total_all_dict = {}
+    for item in data:
+        if total_all_dict.get(item.name) is not None:
+            total_all_dict[item.name] += 1
+        else:
+            total_all_dict[item.name] = 1
+    return dict(sorted(total_all_dict.items(), key=lambda x: x[1], reverse=True))
 
 
-def total_byyear(cal):
+def total_byyear(data):
     """Returns a dictionary containing each year represented in the data from the given Excel sheets. Each year
     is mapped to a dictionary containing totals for each event from that year."""
     total_byyear_dict = {}
-    for year in cal.years:
-        temp_dict = build_event_dict()
-        total_byyear_dict[year.year] = temp_dict
-        for month in year.months:
-            for event in month.event_dict:
-                total_byyear_dict[year.year][event] += month.event_dict[event]
-    return total_byyear_dict
+    temp = {}
+    for year in data:
+        if total_byyear_dict.get(year.year) is None:
+            total_byyear_dict[year.year] = {}
+        for item in year.lst:
+            if total_byyear_dict[year.year].get(item.name) is not None:
+                total_byyear_dict[year.year][item.name] += 1
+            else:
+                total_byyear_dict[year.year][item.name] = 1
+        # sort each year in dict into new dict
+        temp[year.year] = dict(sorted(total_byyear_dict[year.year].items(), reverse=True, key=lambda x: x[1]))
+    return temp
 
 
-def total_bymonth(cal):
+def total_bymonth(data):
     """Returns a dictionary containing each month represented in the data from the given Excel sheets. Each month
     is mapped to a dictionary containing totals for each event from that month."""
     total_bymonth_dict = {}
-    # create initial dictionary
-    for month in cal.years[0].months:
-        total_bymonth_dict[month.get_name()] = build_event_dict()
-    # fill dictionary
-    for year in cal.years:
-        for month in year.months:
-            for event in month.event_dict:
-                total_bymonth_dict[month.get_name()][event] += month.event_dict[event]
-    return total_bymonth_dict
+    temp = {}
+    for month in data:
+        if total_bymonth_dict.get(month.month) is None:
+            total_bymonth_dict[month.month] = {}
+        for event in month.lst:
+            if total_bymonth_dict[month.month].get(event.name) is not None:
+                total_bymonth_dict[month.month][event.name] += 1
+            else:
+                total_bymonth_dict[month.month][event.name] = 1
+        temp[month.month] = dict(sorted(total_bymonth_dict[month.month].items(), reverse=True, key=lambda x: x[1]))
+    return temp
 
 
-def avg_bymonth(cal):
+def avg_bymonth(data_y, tbm):
     """Computes the average number of events in each month and returns the results as a dictionary."""
-    curr_month = datetime.datetime.now().month
-    avg_bymonth_dict = total_bymonth(cal)
+    avg_bymonth_dict = copy.deepcopy(tbm)
+    months_in_last_year = [event.month for event in data_y[-1].lst]
     for month in avg_bymonth_dict:
         for event in avg_bymonth_dict[month]:
-            # checking for current month for more precise averages
-            if map_to_num(month) <= curr_month:
-                avg_bymonth_dict[month][event] = avg_bymonth_dict[month][event] / len(cal.years)
+            if month in months_in_last_year:
+                avg_bymonth_dict[month][event] = round(avg_bymonth_dict[month][event] / len(data_y), 5)
             else:
-                avg_bymonth_dict[month][event] = avg_bymonth_dict[month][event] / (len(cal.years) - 1)
+                avg_bymonth_dict[month][event] = round(avg_bymonth_dict[month][event] / (len(data_y) - 1), 5)
     return avg_bymonth_dict
 
 
@@ -69,57 +81,37 @@ def percent_total(ta):
     return percent_total_dict
 
 
-def percent_bytime(tby):
+def percent_bytime(tbt):
     """Computes a sum total of all events in each year and computes the percentage of each event against that total."""
-    percent_byyear_dict = {}
-    for year in tby:
+    percent_bytime_dict = {}
+    for per in tbt:
         total_events = 0
-        percent_byyear_dict[year] = build_event_dict()
-        for event in tby[year]:
-            total_events += tby[year][event]
-        for event in tby[year]:
-            percent_byyear_dict[year][event] += (tby[year][event] / total_events) * 100
-    return percent_byyear_dict
+        percent_bytime_dict[per] = {}
+        for item in tbt[per]:
+            total_events += tbt[per][item]
+        for item in tbt[per]:
+            percent_bytime_dict[per][item] = (tbt[per][item] / total_events) * 100
+    return percent_bytime_dict
 # ---------------------------------------------------------------- #
 
 
 # ----------------------- Event Handling ------------------------- #
-def build_event_dict():
-    """Builds the dictionary containing the weather events based on the events contained within the
-    events.txt file."""
-    event_dict = {}
-    f = open(str(Path(os.getcwd()).parent) + "\\events\\events.txt", "r")
-    for line in f:
-        event_dict[line.split("\n")[0].upper()] = 0
-    f.close()
-    return event_dict
-
-
-def map_to_alias(event_name):
+def map_to_alias(event_name, aliases):
     """Maps a given event name to a corresponding name within the 'aliases.txt' file"""
-    alias_dict = read_alias_file()
-    if alias_dict.get(event_name) is not None:
-        mapped_name = alias_dict[event_name]
-        return mapped_name
+    if aliases.get(event_name) is not None:
+        mapped_name = aliases[event_name]
+        return mapped_name.upper()
     else:
-        return None
+        return event_name.upper()
 
 
 def read_alias_file():
     """Reads the aliases.txt file and parses out each given alias. Returns a dictionary."""
     aliases = {}
-    block = []
-    f = open(str(Path(os.getcwd()).parent) + "\\events\\aliases.txt", "r")
+    f = open(str(Path(os.getcwd()).parent) + "\\aliases.txt", "r")
     for line in f:
-        block.append(line)
-        if line == "}\n" or line == "}":
-            # index 0 will always be the event that is being aliased to
-            # 2 indexes will be { and }
-            # only need to work with length of block - 3
-            for i in range(len(block) - 3):
-                temp = block[i + 2].split("\n")[0].split("\t")[1]
-                aliases[temp.upper()] = block[0].split("\n")[0].upper()
-            block = []
+        key_value = line[:-1].upper().split('=')
+        aliases[key_value[0]] = key_value[1]
     return aliases
 # ---------------------------------------------------------------- #
 
@@ -156,17 +148,6 @@ def write_log():
 
 
 # --------------------- Reading excel sheets --------------------- #
-def read_xlsx(infile, calendar):
-    """Navigates to the data folder and reads the .xlsx files located there."""
-    data = load_workbook(infile)
-    sheet = data.active
-    for row in sheet.iter_rows(min_row=2, min_col=2, max_col=7):
-        year = parse_year(row[0].value)
-        month = parse_month(row[0].value)
-        event = row[5].value
-        calendar.add_event(event, year, month)
-
-
 def parse_month(val):
     """Method for parsing the month out of the given column from the Excel sheet."""
     month = val.split(" ")[0].split("/")[1]
@@ -177,33 +158,51 @@ def parse_year(val):
     """Method for parsing the year out of the given column from the Excel sheet."""
     year = val.split(" ")[0].split("/")[0]
     return int(year)
-# ---------------------------------------------------------------- #
 
 
-# ---------------------------- Setup ----------------------------- #
-def setup(curdir):
-    """Called once in main file if directories do not exist (first run of script)"""
-    create_directories(curdir)
+def read_xlsx(file_lst, aliases):
+    """Reads every .xlsx file found in the 'data' directory, separates the year, month, and event name,
+    and adds each to a tuple. This tuple is then added to a list and passed to parse_data."""
+    line_lst = []
+    for file in file_lst:
+        sheet = load_workbook(file).active
+        for row in sheet.iter_rows(min_row=2, min_col=2, max_col=7):
+            if row[5].value is not None:  # skips any rows where the event name cell is empty
+                year = parse_year(row[0].value)
+                month = parse_month(row[0].value)
+                event = row[5].value
+                row_tup = (year, month, map_to_alias(event.upper(), aliases))
+                line_lst.append(row_tup)
+    return parse_data(line_lst, aliases)
 
 
-def create_directories(curdir):
-    """Creates directories within the folder containing the event_counter.py file if they do not
-    already exist."""
-    os.chdir(curdir)
-    if not os.path.exists(".\\logs"):
-        os.mkdir(".\\logs")
-    if not os.path.exists(".\\output"):
-        os.mkdir(".\\output")
-    if not os.path.exists(".\\events"):
-        os.mkdir(".\\events")
-        os.chdir(".\\events")
-        f1 = open("events.txt", "w")
-        f2 = open("aliases.txt", "w")
-        f1.close()
-        f2.close()
-        os.chdir(curdir)
-    if not os.path.exists(".\\data"):
-        os.mkdir(".\\data")
+def parse_data(data, aliases):
+    """Using data list from read_xlsx, creates separate event lists for overall, by year, and by month, returning
+    each list in a tuple."""
+    master_list = []
+    years = []
+    months = []
+    ###
+    for line in data:
+        ###
+        year = line[0]  # gets year from cell containing date of report
+        month = line[1]  # gets month from cell containing date of report
+        event = Event(year, month, map_to_alias(line[2].upper(), aliases))  # new event object with year, month, and event name from cell containing event name
+        master_list.append(event)  # add new event to master list
+        ###
+        if year not in [y.year for y in years]:  # create list of years represented in data
+            years.append(Year(year))
+        if month not in [m.month for m in months]:
+            months.append(Month(month))
+    ###
+    for y in years:
+        # add event to each year when event.month is equal to month
+        y.add([event for event in master_list if event.year == y.year])
+    for m in months:
+        # add event to each month when event.month is equal to month
+        m.add([event for event in master_list if event.month == m.month])
+    ###
+    return master_list, years, sorted(months, key=lambda mon: int(mon.month))  # master_list, years, and months are returned to event_counter
 # ---------------------------------------------------------------- #
 
 
@@ -225,23 +224,4 @@ def map_to_name(month_num):
         "12": "DECEMBER"
     }
     return name_dict[month_num]
-
-
-def map_to_num(month_name):
-    """Maps a given month name to that month's number code"""
-    num_dict = {
-        "JANUARY": 1,
-        "FEBRUARY": 2,
-        "MARCH": 3,
-        "APRIL": 4,
-        "MAY": 5,
-        "JUNE": 6,
-        "JULY": 7,
-        "AUGUST": 8,
-        "SEPTEMBER": 9,
-        "OCTOBER": 10,
-        "NOVEMBER": 11,
-        "DECEMBER": 12
-    }
-    return num_dict[month_name]
 # ---------------------------------------------------------------- #
