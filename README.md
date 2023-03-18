@@ -73,5 +73,3 @@ Percentage of Events By Month: The percentage of each event out of the total tha
 
 Percentage of Events Overall: The percentage of each event out of the total of all events
 ```
-
-The script will also generate a log file within the `logs` folder. This log file will contain an error detailing each event found within the input data that was not represented within the `events.txt` file. These specific occurrences can either be added to the events file or to the `aliases.txt` file to be counted if the script is run again.
