@@ -22,7 +22,7 @@ The `logs` and `output` folder are used by the program for outputting the logs a
 
 ### Input Data
 
-This script is designed to work with local storm report data obtained from http://mesonet.agron.iastate.edu/lsr/. Enter the WFO code(s) for the desired office or offices and the start/end dates and use the Excel download option. For best results, select 12:00AM on January 1st of the starting year. **Important: This tool has a limit to how long the given Excel sheets can be. If you are processing more data than can fit into one sheet, end the first sheet at 11:59PM and begin the next sheet at 12:00AM on the next day.**
+This script is designed to work with local storm report data obtained from http://mesonet.agron.iastate.edu/lsr/. Enter the WFO code(s) for the desired office or offices and the start/end dates and use the Excel download option. For best results, select 12:00AM on the 1st day of the first month to be counted. **Important: This tool has a limit to how long the given Excel sheets can be. If you are processing more data than can fit into one sheet, end the first sheet at 11:59PM and begin the next sheet at 12:00AM on the next day.**
 
 Place the Excel sheet(s) into the `data` folder.
 
