@@ -12,7 +12,7 @@ The `wecsetup.py` script must be run once to create directories. To do so, navig
 
 ```python wecsetup.py``` or ```python3 wecsetup.py``` if multiple versions of Python are installed.
 
-This first run will generate the following folders: `data`, `logs`, and `output`, along with `aliases.txt`
+This will generate the following folders: `data`, `logs`, and `output`, along with `aliases.txt`
 
 ### Generated Files
 
