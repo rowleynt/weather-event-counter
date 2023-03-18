@@ -57,7 +57,7 @@ water_spout=water spout
 
 ## Running
 
-After completing the first time setup, run the script again with the command ```python event_counter.py```. An output file is created within the `output` folder in the form of an Excel spreadsheet. The output file contains the following fields:
+After completing the first time setup, run the script again with the command ```python event_counter.py```. An output file is created within the `output` folder in the form of an Excel spreadsheet. The output file contains the following fields, ordered numberically (descending):
 ```
 Total Events By Year: Tally of the total number of each event in each year, starting from the earliest date and ending at the latest date within the input data
 
