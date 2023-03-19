@@ -110,7 +110,7 @@ def read_alias_file():
     aliases = {}
     f = open(str(Path(os.getcwd()).parent) + "\\aliases.txt", "r")
     for line in f:
-        key_value = line[:-1].upper().split('=')
+        key_value = line.upper().strip().split('=')
         aliases[key_value[0]] = key_value[1]
     return aliases
 # ---------------------------------------------------------------- #
