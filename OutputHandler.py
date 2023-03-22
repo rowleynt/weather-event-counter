@@ -8,7 +8,6 @@ import datetime
 
 class OutputHandler(object):
     def __init__(self, data):
-        # TODO: sort data in dictionaries
         self.total_all = total_all(data[0])  # done
         self.total_byyear = total_byyear(data[1])  # done
         self.total_bymonth = total_bymonth(data[2])  # done
@@ -21,12 +20,16 @@ class OutputHandler(object):
 
     def output_xlsx(self):
         filename = self.make_filename(datetime.datetime.now())
-        os.chdir(str(Path(os.getcwd()).parent) + ".\\output")
+        curdir = os.getcwd()
+        os.chdir(Path(curdir).parent)
+        os.chdir("output")
+        # os.chdir(str(Path(os.getcwd()).parent) + ".\\output")
         wb = Workbook()
         sheet = wb.active
         sheet.title = "output-" + filename
         self.write_to_sheet(sheet)
         wb.save(f"output-{filename}.xlsx")
+        os.chdir(curdir)
         return filename
 
     def write_to_sheet(self, sheet):
