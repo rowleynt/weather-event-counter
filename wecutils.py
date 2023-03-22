@@ -108,10 +108,13 @@ def map_to_alias(event_name, aliases):
 def read_alias_file():
     """Reads the aliases.txt file and parses out each given alias. Returns a dictionary."""
     aliases = {}
-    f = open(str(Path(os.getcwd()).parent) + "\\aliases.txt", "r")
+    curdir = os.getcwd()
+    os.chdir(Path(curdir).parent)
+    f = open("aliases.txt", "r")
     for line in f:
         key_value = line.upper().strip().split('=')
         aliases[key_value[0]] = key_value[1]
+    os.chdir(curdir)
     return aliases
 # ---------------------------------------------------------------- #
 
