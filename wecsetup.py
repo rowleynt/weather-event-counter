@@ -21,7 +21,7 @@ def create_directories(curdir):
         os.mkdir("output")
         os.chdir(curdir)
     if not os.path.exists("data"):
-        os.mkdir("data")
+        os.mkdir("\data")
 
 
 if __name__ == "__main__":
