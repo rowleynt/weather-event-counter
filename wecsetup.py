@@ -15,13 +15,13 @@ def create_directories(curdir):
     os.chdir(curdir)
     f = open("aliases.txt", "w")
     f.close()
-    if not os.path.exists(".\\logs"):
-        os.mkdir(".\\logs")
-    if not os.path.exists(".\\output"):
-        os.mkdir(".\\output")
+    if not os.path.exists("logs"):
+        os.mkdir("logs")
+    if not os.path.exists("output"):
+        os.mkdir("output")
         os.chdir(curdir)
-    if not os.path.exists(".\\data"):
-        os.mkdir(".\\data")
+    if not os.path.exists("data"):
+        os.mkdir("data")
 
 
 if __name__ == "__main__":
