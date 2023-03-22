@@ -2,7 +2,7 @@ import os
 
 
 def main():
-    if not os.path.exists(".\\logs"):
+    if not os.path.exists("logs"):
         create_directories(os.getcwd())
         print("Directories generated. Place .xlsx file(s) into 'data' folder before running 'event_counter.py'")
     else:
