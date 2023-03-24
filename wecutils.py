@@ -176,7 +176,7 @@ def read_xlsx(file_lst, aliases):
                 event = row[5].value
                 row_tup = (year, month, map_to_alias(event.upper(), aliases))
                 line_lst.append(row_tup)
-    return parse_data(line_lst, aliases)
+    return parse_data(sorted(line_lst, key=lambda x: (x[0], x[1])), aliases)
 
 
 def parse_data(data, aliases):
