@@ -8,13 +8,13 @@ import datetime
 
 class OutputHandler(object):
     def __init__(self, data):
-        self.total_all = total_all(data[0])  # done
-        self.total_byyear = total_byyear(data[1])  # done
-        self.total_bymonth = total_bymonth(data[2])  # done
-        self.avg_bymonth = avg_bymonth(data[1], self.total_bymonth)  # done
-        self.percent_total = percent_total(self.total_all)  # done
-        self.percent_byyear = percent_bytime(self.total_byyear)  # done
-        self.percent_bymonth = percent_bytime(self.total_bymonth)  # done
+        self.total_all = total_all(data[0])
+        self.total_byyear = total_byyear(data[1])
+        self.total_bymonth = total_bymonth(data[2])
+        self.avg_bymonth = avg_bymonth(data[1], self.total_bymonth)
+        self.percent_total = percent_total(self.total_all)
+        self.percent_byyear = percent_bytime(self.total_byyear)
+        self.percent_bymonth = percent_bytime(self.total_bymonth)
 
         self.output_filename = self.output_xlsx()
 
@@ -23,7 +23,6 @@ class OutputHandler(object):
         curdir = os.getcwd()
         os.chdir(Path(curdir).parent)
         os.chdir("output")
-        # os.chdir(str(Path(os.getcwd()).parent) + ".\\output")
         wb = Workbook()
         sheet = wb.active
         sheet.title = "output-" + filename
